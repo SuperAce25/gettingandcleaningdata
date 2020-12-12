@@ -1,0 +1,44 @@
+##This is how I find the result to the first question of the Week 2 from the course Getting and Cleaning Data of Coursera
+##First you have to open R instead of RStudio
+##You have to install 3 packages:
+install.packages("jsonlite")
+
+install.packages("httpuv")
+
+install.packages("httr")
+
+##And then load the packages:
+
+library(jsonlite)
+
+library(httpuv)
+
+library(httr)
+
+## Now you have to create an API to access data from GITHUB:
+## You open this URL: https://github.com/settings/developers
+## Name the App as you want and fill the data as follow:
+## In Homepage URL: http://github.com ## Because the data is github!
+## Authorization callback URL: http://localhost:1410
+## Push 'Accept' and create a new client
+## Copy the client secret and go back to R
+
+## Execute the following statements:
+
+oauth_endpoints("github")
+myapp <- oauth_app("github",
+  key = "56b637a5baffac62cad9",
+  secret = "8e107541ae1791259e9987d544ca568633da2ebf"
+)
+##With your corresponding key and secret
+
+github_token <- oauth2.0_token(oauth_endpoints("github"), myapp)
+gtoken <- config(token = github_token)
+req <- GET("CHOSEN_URL", gtoken) ##Here you replace with the URL they want you to access
+## 'req' has the information in JSON format, so you have to extract it by using the function 'content()'
+json1 <- content(req)
+## but to transform it to dataframe (I think) you have o use the following command:
+dataframe  <- jsonlite::fromJSON(toJSON(json1))
+## In the 'dataframe' variable is the data that you are looking for, now you can look for the information required.
+
+
